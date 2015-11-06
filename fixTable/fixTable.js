@@ -8,7 +8,10 @@ var fixTable = (function() {
     var initFixTable = function(tableObj, padding) {
 
         // 渲染新表头
-        var headerObj = _initNewHeader(tableObj);
+        _initNewHeader(tableObj);
+
+        // 显示表格(有限隐藏表格防止刷新时闪现的需要隐藏的列)
+        tableObj.show();
 
         // 根据浏览器窗口调整表格高度(必须先设置高度再计算表头宽度，因为可能出现的滚动条会影响宽度的计算)
         _setHeight(tableObj, padding);
@@ -66,6 +69,13 @@ var fixTable = (function() {
             var tmpWidth = $(oriThs[i]).attr("min-width");
             tds.eq(i).css("min-width", tmpWidth);
 
+            // 根据原始表头display配置表格的display
+            if ($(oriThs[i]).css("display") === "none") {
+                tableObj.contents().find("tr").each(function() {
+                    $(this).children("td").eq(i).hide();
+                });
+            }
+
             // 累计计算min-width得出表格的最小宽度
             totalWidth += parseInt(tmpWidth.slice(0, -2));
         }
@@ -86,8 +96,6 @@ var fixTable = (function() {
 
         // 渲染滚动div
         $(headerWrapper).after(scrollObj);
-
-        return $(headerWrapper);
     };
 
     // 根据浏览器窗口调整表格高度
@@ -112,12 +120,39 @@ var fixTable = (function() {
             }
             var tmpWidth = tds.eq(i).width() + 16 + 2;
             ths.eq(i).css("width", tmpWidth + "px");
-            offset += tmpWidth;
+
+            if (ths.eq(i).css("display") !== "none") {
+                offset += tmpWidth;
+            }
         }
+    };
+
+    // 根据索引号显示列
+    var showColumn = function(tableObj, idx) {
+        tableObj.contents().find("tr").each(function() {
+            $(this).children("td").eq(idx).show();
+        });
+        tableObj.parent().prev().children("div").eq(idx).show();
+
+        // 计算表头宽度
+        recalculateHeader(tableObj);
+    };
+
+    // 根据索引号隐藏列
+    var hideColumn = function(tableObj, idx) {
+        tableObj.contents().find("tr").each(function() {
+            $(this).children("td").eq(idx).hide();
+        });
+        tableObj.parent().prev().children("div").eq(idx).hide();
+
+        // 计算表头宽度
+        recalculateHeader(tableObj);
     };
 
     return {
         initFixTable: initFixTable,
-        renderHeader: recalculateHeader
+        renderHeader: recalculateHeader,
+        showColumn: showColumn,
+        hideColumn: hideColumn
     };
 })();

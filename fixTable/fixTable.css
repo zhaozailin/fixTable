@@ -3,6 +3,7 @@
   position: relative;
   height: 37px;
   border-left: 1px solid #ddd;
+  z-index: 1;
 }
 
 .ft-th-wrapper div {
@@ -19,6 +20,7 @@
 .ft-table {
   background: #fff;
   margin: 0 !important;
+  display: none;
 }
 
 .ft-table td {
@@ -41,7 +43,7 @@
 
 .ft-table-wrapper {
   width: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
   /*定位是为了配合bootstrap的滚动组件*/
   position: relative;
 }
