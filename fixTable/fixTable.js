@@ -47,10 +47,20 @@ var fixTable = (function() {
         // 根据原始表头的信息生成新表头
         for (var i = 0; i < oriThs.length; i++) {
 
-            // 复制原始表头的信息
+            // 复制原始表头的内容
             var newTh = document.createElement("div");
             $(newTh).html($(oriThs[i]).html());
             $(headerWrapper).append(newTh);
+
+            // 复制原始表头的name属性
+            if ($(oriThs[i]).attr("name") !== undefined) {
+                $(newTh).attr("name", $(oriThs[i]).attr("name"));
+            }
+
+            // 复制原始表头的class
+            if ($(oriThs[i]).attr("class") !== undefined) {
+                $(newTh).attr("class", $(oriThs[i]).attr("class"));
+            }
 
             // 根据原始表头配置的min-width配置表格的最小宽度
             var tmpWidth = $(oriThs[i]).attr("min-width");
