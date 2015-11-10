@@ -72,7 +72,9 @@
   <script src="bootstrap/dist/js/bootstrap.js"></script>
   <script src="fixTable/fixTable.js"></script>
   <script>
-    fixTable.initFixTable($("#table"), 200);
+    fixTable.initFixTable($("#table"), 200, function() {
+      alert("已滚动到底");
+    });
   </script>
 </body>
 </html>

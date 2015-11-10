@@ -5,7 +5,7 @@ var fixTable = (function() {
 
     // 初始化
     // padding:表示浏览器窗口减去表格高度后的空余高度
-    var initFixTable = function(tableObj, padding) {
+    var initFixTable = function(tableObj, padding, callback) {
 
         // 渲染新表头
         _initNewHeader(tableObj);
@@ -28,6 +28,15 @@ var fixTable = (function() {
                 // 计算表头宽度
                 recalculateHeader(tableObj);
             }, 200);
+        });
+
+        // 监听滚动是否到底
+        tableObj.parent().scroll(function(e) {
+            if ($(this).scrollTop() + $(this).height() >= tableObj.height()) {
+                if (callback) {
+                    callback();
+                }
+            }
         });
     };
 
