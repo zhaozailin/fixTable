@@ -74,9 +74,14 @@ var fixTable = (function() {
                 $(newTh).attr("class", $(oriThs[i]).attr("class"));
             }
 
-            // 根据原始表头配置的min-width配置表格的最小宽度
+            // 根据原始表头配置的min-width配置表格的最小宽度、最大宽度
             var tmpWidth = $(oriThs[i]).attr("min-width");
             tds.eq(i).css("min-width", tmpWidth);
+
+            var tmpMaxWidth = $(oriThs[i]).attr("max-width");
+            if (tmpMaxWidth) {
+                tds.eq(i).css("max-width", tmpMaxWidth);
+            }
 
             // 根据原始表头display配置表格的display
             if ($(oriThs[i]).css("display") === "none") {
