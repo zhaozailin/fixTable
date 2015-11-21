@@ -83,10 +83,10 @@ var fixTable = (function() {
                 tds.eq(i).css("min-width", tmpMinWidth);
             }
 
-            // 是否固定宽度
+            // 设置固定宽度
             var tmpSolidWidth = $(oriThs[i]).attr("solid-width");
             if (tmpSolidWidth) {
-                tds.eq(i).css("width", tmpMinWidth);
+                tds.eq(i).css("width", tmpSolidWidth);
             }
 
             // 根据原始表头display配置表格的display
