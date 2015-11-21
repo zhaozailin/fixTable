@@ -74,13 +74,19 @@ var fixTable = (function() {
                 $(newTh).attr("class", $(oriThs[i]).attr("class"));
             }
 
-            // 根据原始表头配置的min-width配置表格的最小宽度、最大宽度
-            var tmpWidth = $(oriThs[i]).attr("min-width");
-            tds.eq(i).css("min-width", tmpWidth);
+            // 根据原始表头配置的min-width配置表格的最小宽度、固定宽度
+            // 规则：如果设置了固定宽度，就不要设置最小宽度了
+            // 最大宽度不起作用，这里不设置
+            // 将td中保留一个不设置固定宽度，那它本身的宽度是由总宽度-固定宽度总和决定的，只要总宽度与固定宽度不变，它的宽度就不会变
+            var tmpMinWidth = $(oriThs[i]).attr("min-width");
+            if (tmpMinWidth) {
+                tds.eq(i).css("min-width", tmpMinWidth);
+            }
 
-            var tmpMaxWidth = $(oriThs[i]).attr("max-width");
-            if (tmpMaxWidth) {
-                tds.eq(i).css("max-width", tmpMaxWidth);
+            // 是否固定宽度
+            var tmpSolidWidth = $(oriThs[i]).attr("solid-width");
+            if (tmpSolidWidth) {
+                tds.eq(i).css("width", tmpMinWidth);
             }
 
             // 根据原始表头display配置表格的display
@@ -91,7 +97,12 @@ var fixTable = (function() {
             }
 
             // 累计计算min-width得出表格的最小宽度
-            totalWidth += parseInt(tmpWidth.slice(0, -2));
+            if (tmpMinWidth) {
+                totalWidth += parseInt(tmpMinWidth.slice(0, -2));
+            }
+            if (tmpSolidWidth) {
+                totalWidth += parseInt(tmpSolidWidth.slice(0, -2));
+            }
         }
 
         // 渲染新表头
